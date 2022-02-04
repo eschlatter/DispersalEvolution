@@ -1,0 +1,249 @@
+distance,category,rel_freq
+0-0.5,empirical,0.216666667
+0.5-1.5,empirical,0.2
+1.5- 2.5,empirical,0.158333333
+2.5-3.5,empirical,0.141666667
+3.5-4.5,empirical,0.066666667
+4.5-5.5,empirical,0.066666667
+5.5-6.5,empirical,0.041666667
+6.5-7.5,empirical,0.041666667
+7.5-8.5,empirical,0.016666667
+8.5-9.5,empirical,0.025
+9.5-10.5,empirical,0.008333333
+10.5-11.5,empirical,0
+11.5-12.5,empirical,0
+12.5 - 13.5,empirical,0.008333333
+13.5 - 14.5,empirical,0
+14.5-15.5,empirical,0
+15.5 - 16.5,empirical,0.008333333
+16.5 - 17.5,empirical,0
+17.5 - 18.5,empirical,0
+18.5-19.5,empirical,0
+19.5 - 20.5,empirical,0
+20.5- 21.5,empirical,0
+21.5-22.5,empirical,0
+22.5 - 23.5,empirical,0
+23.5-24.5,empirical,0
+24.5-25.5,empirical,0
+25.5-26.5,empirical,0
+26.5-27.5,empirical,0
+27.5-28.5,empirical,0
+28.5-29.5,empirical,0
+29.5 - 30,empirical,0
+0-0.5,simulated_high,0.809174312
+0.5-1.5,simulated_high,0.115229358
+1.5- 2.5,simulated_high,0.052844037
+2.5-3.5,simulated_high,0.00440367
+3.5-4.5,simulated_high,0.00146789
+4.5-5.5,simulated_high,0.000733945
+5.5-6.5,simulated_high,0.000733945
+6.5-7.5,simulated_high,0.000366972
+7.5-8.5,simulated_high,0.00146789
+8.5-9.5,simulated_high,0.002201835
+9.5-10.5,simulated_high,0.00146789
+10.5-11.5,simulated_high,0.000733945
+11.5-12.5,simulated_high,0
+12.5 - 13.5,simulated_high,0.001834862
+13.5 - 14.5,simulated_high,0.000366972
+14.5-15.5,simulated_high,0
+15.5 - 16.5,simulated_high,0.000733945
+16.5 - 17.5,simulated_high,0.000366972
+17.5 - 18.5,simulated_high,0
+18.5-19.5,simulated_high,0
+19.5 - 20.5,simulated_high,0.000733945
+20.5- 21.5,simulated_high,0
+21.5-22.5,simulated_high,0.000733945
+22.5 - 23.5,simulated_high,0.000733945
+23.5-24.5,simulated_high,0
+24.5-25.5,simulated_high,0.000366972
+25.5-26.5,simulated_high,0.001100917
+26.5-27.5,simulated_high,0.000366972
+27.5-28.5,simulated_high,0.000366972
+28.5-29.5,simulated_high,0.000366972
+29.5 - 30,simulated_high,0.001100917
+0-0.5,simulated_med,0.822061483
+0.5-1.5,simulated_med,0.102712477
+1.5- 2.5,simulated_med,0.062206148
+2.5-3.5,simulated_med,0.001446655
+3.5-4.5,simulated_med,0.001446655
+4.5-5.5,simulated_med,0.000723327
+5.5-6.5,simulated_med,0.000361664
+6.5-7.5,simulated_med,0.001084991
+7.5-8.5,simulated_med,0.000723327
+8.5-9.5,simulated_med,0.000361664
+9.5-10.5,simulated_med,0.000361664
+10.5-11.5,simulated_med,0.000361664
+11.5-12.5,simulated_med,0
+12.5 - 13.5,simulated_med,0.000361664
+13.5 - 14.5,simulated_med,0
+14.5-15.5,simulated_med,0
+15.5 - 16.5,simulated_med,0.000361664
+16.5 - 17.5,simulated_med,0.000723327
+17.5 - 18.5,simulated_med,0.000723327
+18.5-19.5,simulated_med,0.000361664
+19.5 - 20.5,simulated_med,0
+20.5- 21.5,simulated_med,0.000361664
+21.5-22.5,simulated_med,0.000723327
+22.5 - 23.5,simulated_med,0.000361664
+23.5-24.5,simulated_med,0
+24.5-25.5,simulated_med,0.000361664
+25.5-26.5,simulated_med,0
+26.5-27.5,simulated_med,0.000361664
+27.5-28.5,simulated_med,0.001446655
+28.5-29.5,simulated_med,0
+29.5 - 30,simulated_med,0
+0-0.5,simulated_low,0.775276612
+0.5-1.5,simulated_low,0.143456696
+1.5- 2.5,simulated_low,0.069057612
+2.5-3.5,simulated_low,0.001144601
+3.5-4.5,simulated_low,0
+4.5-5.5,simulated_low,0.001144601
+5.5-6.5,simulated_low,0.000763068
+6.5-7.5,simulated_low,0
+7.5-8.5,simulated_low,0
+8.5-9.5,simulated_low,0
+9.5-10.5,simulated_low,0.000763068
+10.5-11.5,simulated_low,0.001144601
+11.5-12.5,simulated_low,0.000763068
+12.5 - 13.5,simulated_low,0
+13.5 - 14.5,simulated_low,0.000763068
+14.5-15.5,simulated_low,0
+15.5 - 16.5,simulated_low,0.001144601
+16.5 - 17.5,simulated_low,0.001144601
+17.5 - 18.5,simulated_low,0
+18.5-19.5,simulated_low,0
+19.5 - 20.5,simulated_low,0
+20.5- 21.5,simulated_low,0.000763068
+21.5-22.5,simulated_low,0
+22.5 - 23.5,simulated_low,0
+23.5-24.5,simulated_low,0.000763068
+24.5-25.5,simulated_low,0.001144601
+25.5-26.5,simulated_low,0.000763068
+26.5-27.5,simulated_low,0
+27.5-28.5,simulated_low,0
+28.5-29.5,simulated_low,0
+29.5 - 30,simulated_low,0
+0-0.5,simulated_none,0.770645646
+0.5-1.5,simulated_none,0.158408408
+1.5- 2.5,simulated_none,0.055930931
+2.5-3.5,simulated_none,0.003378378
+3.5-4.5,simulated_none,0.000750751
+4.5-5.5,simulated_none,0.000750751
+5.5-6.5,simulated_none,0.002252252
+6.5-7.5,simulated_none,0.001126126
+7.5-8.5,simulated_none,0
+8.5-9.5,simulated_none,0
+9.5-10.5,simulated_none,0
+10.5-11.5,simulated_none,0
+11.5-12.5,simulated_none,0
+12.5 - 13.5,simulated_none,0.000375375
+13.5 - 14.5,simulated_none,0.001126126
+14.5-15.5,simulated_none,0.000375375
+15.5 - 16.5,simulated_none,0.000375375
+16.5 - 17.5,simulated_none,0.000750751
+17.5 - 18.5,simulated_none,0
+18.5-19.5,simulated_none,0
+19.5 - 20.5,simulated_none,0.000750751
+20.5- 21.5,simulated_none,0
+21.5-22.5,simulated_none,0
+22.5 - 23.5,simulated_none,0
+23.5-24.5,simulated_none,0.000750751
+24.5-25.5,simulated_none,0.000375375
+25.5-26.5,simulated_none,0
+26.5-27.5,simulated_none,0.001126126
+27.5-28.5,simulated_none,0.000375375
+28.5-29.5,simulated_none,0.000375375
+29.5 - 30,simulated_none,0
+0-0.5,capacity_1,0.766028003
+0.5-1.5,capacity_1,0.15880619
+1.5- 2.5,capacity_1,0.058585114
+2.5-3.5,capacity_1,0.002947679
+3.5-4.5,capacity_1,0.00110538
+4.5-5.5,capacity_1,0.001473839
+5.5-6.5,capacity_1,0.00073692
+6.5-7.5,capacity_1,0.00073692
+7.5-8.5,capacity_1,0.00036846
+8.5-9.5,capacity_1,0.00073692
+9.5-10.5,capacity_1,0.00073692
+10.5-11.5,capacity_1,0.00036846
+11.5-12.5,capacity_1,0.00073692
+12.5 - 13.5,capacity_1,0
+13.5 - 14.5,capacity_1,0
+14.5-15.5,capacity_1,0
+15.5 - 16.5,capacity_1,0
+16.5 - 17.5,capacity_1,0.00036846
+17.5 - 18.5,capacity_1,0.00036846
+18.5-19.5,capacity_1,0.00073692
+19.5 - 20.5,capacity_1,0
+20.5- 21.5,capacity_1,0.00110538
+21.5-22.5,capacity_1,0.00036846
+22.5 - 23.5,capacity_1,0
+23.5-24.5,capacity_1,0.00036846
+24.5-25.5,capacity_1,0.00036846
+25.5-26.5,capacity_1,0.00110538
+26.5-27.5,capacity_1,0.00036846
+27.5-28.5,capacity_1,0.00073692
+28.5-29.5,capacity_1,0.00036846
+29.5 - 30,capacity_1,0.00036846
+0-0.5,capacity_2,0.887864612
+0.5-1.5,capacity_2,0.097413319
+1.5- 2.5,capacity_2,0.005090809
+2.5-3.5,capacity_2,0.001926252
+3.5-4.5,capacity_2,0.000963126
+4.5-5.5,capacity_2,0.000275179
+5.5-6.5,capacity_2,0.000412768
+6.5-7.5,capacity_2,0.000275179
+7.5-8.5,capacity_2,0.000550358
+8.5-9.5,capacity_2,0.000550358
+9.5-10.5,capacity_2,0.000963126
+10.5-11.5,capacity_2,0.000137589
+11.5-12.5,capacity_2,0.000412768
+12.5 - 13.5,capacity_2,0
+13.5 - 14.5,capacity_2,0.000550358
+14.5-15.5,capacity_2,0.000137589
+15.5 - 16.5,capacity_2,0
+16.5 - 17.5,capacity_2,0
+17.5 - 18.5,capacity_2,0.000137589
+18.5-19.5,capacity_2,0
+19.5 - 20.5,capacity_2,0.000275179
+20.5- 21.5,capacity_2,0.000137589
+21.5-22.5,capacity_2,0
+22.5 - 23.5,capacity_2,0
+23.5-24.5,capacity_2,0.000275179
+24.5-25.5,capacity_2,0.000137589
+25.5-26.5,capacity_2,0.000137589
+26.5-27.5,capacity_2,0.000275179
+27.5-28.5,capacity_2,0.000550358
+28.5-29.5,capacity_2,0.000412768
+29.5 - 30,capacity_2,0.000137589
+0-0.5,capacity_4,0.95137929
+0.5-1.5,capacity_4,0.036059859
+1.5- 2.5,capacity_4,0.005529178
+2.5-3.5,capacity_4,0.000600998
+3.5-4.5,capacity_4,0.000360599
+4.5-5.5,capacity_4,0.000661097
+5.5-6.5,capacity_4,0.000300499
+6.5-7.5,capacity_4,0.000841397
+7.5-8.5,capacity_4,0.000180299
+8.5-9.5,capacity_4,0.000360599
+9.5-10.5,capacity_4,0.000420698
+10.5-11.5,capacity_4,0.0001202
+11.5-12.5,capacity_4,0.000360599
+12.5 - 13.5,capacity_4,0.000300499
+13.5 - 14.5,capacity_4,0.000180299
+14.5-15.5,capacity_4,0.000360599
+15.5 - 16.5,capacity_4,0.000360599
+16.5 - 17.5,capacity_4,0.0001202
+17.5 - 18.5,capacity_4,6.01E-05
+18.5-19.5,capacity_4,0.0001202
+19.5 - 20.5,capacity_4,0.000180299
+20.5- 21.5,capacity_4,6.01E-05
+21.5-22.5,capacity_4,6.01E-05
+22.5 - 23.5,capacity_4,0.0001202
+23.5-24.5,capacity_4,0.0001202
+24.5-25.5,capacity_4,0.000240399
+25.5-26.5,capacity_4,0.000180299
+26.5-27.5,capacity_4,6.01E-05
+27.5-28.5,capacity_4,6.01E-05
+28.5-29.5,capacity_4,6.01E-05
+29.5 - 30,capacity_4,0.000180299
