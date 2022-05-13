@@ -37,18 +37,20 @@ rng('shuffle') % seed the random number generator from computer clock
 
 K = 1;         % carrying capacity per patch
 
+saveto_filepath = '../output_simulations/20220513';
+
 if nbins < 2; error('nbins_use must be at least 2'); end
 if nbins > nbins_env; error('nbins_env must be bigger than nbins'); end
 
 %-----LOAD-ENVIRONMENT----------------------------------------------------%
     if eflag==1
-        load(strcat(['output_environments/env_unbounded_sx=' num2str(sx) '_sy=' num2str(sy) '_nbins=' num2str(nbins_env) '.mat']))
+        load(strcat(['../output_environments/env_unbounded_sx=' num2str(sx) '_sy=' num2str(sy) '_nbins=' num2str(nbins_env) '.mat']))
     elseif eflag==2
-        load(strcat(['output_environments/env_bounded_sx=' num2str(sx) '_sy=' num2str(sy) '_nbins=' num2str(nbins_env) '_nmax=' num2str(nmax) '.mat']))
+        load(strcat(['../output_environments/env_bounded_sx=' num2str(sx) '_sy=' num2str(sy) '_nbins=' num2str(nbins_env) '_nmax=' num2str(nmax) '.mat']))
     elseif eflag==3
-        load(strcat(['output_environments/env_reef_nbins=' num2str(nbins_env) '_nmax=' num2str(nmax) '_bmin=' num2str(b(1)) '_bmax=' num2str(b(2)) '.mat']))
+        load(strcat(['../output_environments/env_reef_nbins=' num2str(nbins_env) '_nmax=' num2str(nmax) '_bmin=' num2str(b(1)) '_bmax=' num2str(b(2)) '.mat']))
     elseif eflag==4
-        load(strcat(['output_environments/env_bounded_het_sx=' num2str(sx) '_sy=' num2str(sy) '_nbins=' num2str(nbins_env) '_nmax=' num2str(nmax) '_bmin=' num2str(b(1)) '_bmax=' num2str(b(2)) '.mat']))
+        load(strcat(['../output_environments/env_bounded_het_sx=' num2str(sx) '_sy=' num2str(sy) '_nbins=' num2str(nbins_env) '_nmax=' num2str(nmax) '_bmin=' num2str(b(1)) '_bmax=' num2str(b(2)) '.mat']))
     end
 %-----LOAD-ENVIRONMENT----------------------------------------------------%
 
@@ -58,7 +60,8 @@ if nbins > nbins_env; error('nbins_env must be bigger than nbins'); end
 
     % create matrix to hold information for all individuals
     pop = zeros(N0,nbins+1);
-    pop(:,1) = ones(N0,1); % assign starting dispersal bin values (set prob stay = 1, others zero)
+    pop(:,1:(nmax+2)) = (1/(nmax+2))*ones(N0,nmax+2); % assign starting dispersal bin values (set equal prob of each distance up to navigation distance + 1)
+    %pop(:,1) = ones(N0,1); % assign starting dispersal bin values (set prob stay = 1, others zero)
     pop(:,nbins+1) = repmat(1:S,1,K); % assign evenly to starting patches
 
     % matrices to record population parameters in, over time
@@ -199,13 +202,13 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
 
     % save output as mat file
     if eflag==1
-        save(strcat(['IBM_unbounded_sx=' num2str(sx) '_sy=' num2str(sy) '_nbins=' num2str(nbins) '_nmax=' num2str(nmax) '_del=' num2str(del) '_b=' num2str(b) '_p=' num2str(p) '.mat']))
+        save(strcat([saveto_filepath '/IBM_unbounded_sx=' num2str(sx) '_sy=' num2str(sy) '_nbins=' num2str(nbins) '_nmax=' num2str(nmax) '_del=' num2str(del) '_b=' num2str(b) '_p=' num2str(p) '.mat']))
     elseif eflag==2
-        save(strcat(['IBM_bounded_sx=' num2str(sx) '_sy=' num2str(sy) '_nbins=' num2str(nbins) '_nmax=' num2str(nmax) '_del=' num2str(del) '_b=' num2str(b) '_p=' num2str(p) '.mat']))
+        save(strcat([saveto_filepath '/IBM_bounded_sx=' num2str(sx) '_sy=' num2str(sy) '_nbins=' num2str(nbins) '_nmax=' num2str(nmax) '_del=' num2str(del) '_b=' num2str(b) '_p=' num2str(p) '.mat']))
     elseif eflag==3
-        save(strcat(['IBM_reef_nbins=' num2str(nbins) '_nmax=' num2str(nmax) '_bmin=' num2str(bmin) '_bmax=' num2str(bmax) '_del=' num2str(del) '_p=' num2str(p) '.mat']))
+        save(strcat([saveto_filepath '/IBM_reef_nbins=' num2str(nbins) '_nmax=' num2str(nmax) '_bmin=' num2str(bmin) '_bmax=' num2str(bmax) '_del=' num2str(del) '_p=' num2str(p) '.mat']))
     elseif eflag==4
-        save(strcat(['IBM_bounded_het_sx=' num2str(sx) '_sy=' num2str(sy) '_nbins=' num2str(nbins_env) '_nmax=' num2str(nmax) '_bmin=' num2str(bmin) '_bmax=' num2str(bmax) '_del=' num2str(del) '_p=' num2str(p) '.mat']))
+        save(strcat([saveto_filepath '/IBM_bounded_het_sx=' num2str(sx) '_sy=' num2str(sy) '_nbins=' num2str(nbins_env) '_nmax=' num2str(nmax) '_bmin=' num2str(bmin) '_bmax=' num2str(bmax) '_del=' num2str(del) '_p=' num2str(p) '.mat']))
     end
 
 end % generation loop
@@ -223,14 +226,27 @@ end % generation loop
     xlabel('generation number')
     ylabel('probability')
     title('dispersal bin values')
+    legend(string(1:nbins))
     % save figure
     if eflag==1
-        saveas(2,strcat(['IBMfig_unbounded_sx=' num2str(sx) '_sy=' num2str(sy) '_nbins=' num2str(nbins) '_nmax=' num2str(nmax) '_del=' num2str(del) '_b=' num2str(b) '_p=' num2str(p) '.jpg']))
+        saveas(2,strcat([saveto_filepath '/IBMfig_unbounded_sx=' num2str(sx) '_sy=' num2str(sy) '_nbins=' num2str(nbins) '_nmax=' num2str(nmax) '_del=' num2str(del) '_b=' num2str(b) '_p=' num2str(p) '.jpg']))
     elseif eflag==2
-        saveas(2,strcat(['IBMfig_bounded_sx=' num2str(sx) '_sy=' num2str(sy) '_nbins=' num2str(nbins) '_nmax=' num2str(nmax) '_del=' num2str(del) '_b=' num2str(b) '_p=' num2str(p) '.jpg']))
+        saveas(2,strcat([saveto_filepath '/IBMfig_bounded_sx=' num2str(sx) '_sy=' num2str(sy) '_nbins=' num2str(nbins) '_nmax=' num2str(nmax) '_del=' num2str(del) '_b=' num2str(b) '_p=' num2str(p) '.jpg']))
     elseif eflag==3
-        saveas(2,strcat(['IBMfig_reef_nbins=' num2str(nbins) '_nmax=' num2str(nmax) '_bmin=' num2str(bmin) '_bmax=' num2str(bmax) '_del=' num2str(del) '_p=' num2str(p) '.jpg']))
+        saveas(2,strcat([saveto_filepath '/IBMfig_reef_nbins=' num2str(nbins) '_nmax=' num2str(nmax) '_bmin=' num2str(bmin) '_bmax=' num2str(bmax) '_del=' num2str(del) '_p=' num2str(p) '.jpg']))
     elseif eflag==4
-        saveas(2,strcat(['IBMfig_bounded_het_sx=' num2str(sx) '_sy=' num2str(sy) '_nbins=' num2str(nbins_env) '_nmax=' num2str(nmax) '_bmin=' num2str(bmin) '_bmax=' num2str(bmax) '_del=' num2str(del) '_p=' num2str(p) '.jpg']))
+        saveas(2,strcat([saveto_filepath '/IBMfig_bounded_het_sx=' num2str(sx) '_sy=' num2str(sy) '_nbins=' num2str(nbins_env) '_nmax=' num2str(nmax) '_bmin=' num2str(bmin) '_bmax=' num2str(bmax) '_del=' num2str(del) '_p=' num2str(p) '.jpg']))
     end
+
+    % plot the kernel of population mean displacement probabilities
+    figure(3);clf
+    kern = sum(pop(:,1:30),1)/length(pop);
+    bar(0:29,kern,'k')
+    axis([-0.5 29.5 0 1])
+    ylabel('Population mean probability')
+    xlabel('Distance')
+    title(sprintf('Dispersal Kernel, nmax = %g',nmax))
+
+    writematrix(kern,sprintf('%s/kernel_WithNav_nbins=30_nmax = %g.csv',saveto_filepath,nmax))
+    saveas(3, sprintf('%s/fig_WithNav_nbins=30_nmax=%g.jpg',saveto_filepath,nmax))
 %-----PLOT-RESULTS--------------------------------------------------------%
