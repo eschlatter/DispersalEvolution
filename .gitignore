@@ -11,3 +11,5 @@ resources/
 files_plotcomparisons/
 
 files_plotsims/
+
+*.prj
