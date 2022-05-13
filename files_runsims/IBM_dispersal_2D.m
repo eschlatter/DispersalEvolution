@@ -1,5 +1,4 @@
 function [] = IBM_dispersal_2D(gflag,eflag,sx,sy,nbins_env,nbins,nmax,G,b,p,del)
-% test again
 % written by Allison K. Shaw (ashaw@umn.edu)
 % updated: June 2018
 %
