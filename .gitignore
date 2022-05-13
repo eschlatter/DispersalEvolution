@@ -1,0 +1,13 @@
+# List of untracked files to ignore
+
+output_simulations/
+
+output_environments/
+
+Talk/
+
+resources/
+
+files_plotcomparisons/
+
+files_plotsims/
