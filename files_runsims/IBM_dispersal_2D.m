@@ -68,6 +68,9 @@ if nbins > nbins_env; error('nbins_env must be bigger than nbins'); end
     dtime_avg = zeros(G,nbins); % population mean of dispersal parameters
     dtime_std = zeros(G,nbins); % pop. standard deviation of dispersal parammeters
 
+    % matrix to record survival rates over time
+    fitness = zeros(G,3);
+
     % if set to display graphics, display first figure and wait for keystrike
     if gflag==1
         figure(1); clf
@@ -99,6 +102,7 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
             off = [off; repmat(pop(j,:),[bvec(pop(j,nbins+1)),1])];
         end
         Noff = size(off,1); % total number of offspring
+        fitness(g,1) = Noff; % store total number of offspring produced
     %-----REPRODUCTION-----%
 
 
@@ -108,7 +112,7 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
     drand = rand(Noff,1); % random numbers to use for dispersal probabilities
     d_ind = zeros(Noff,1); % to hold the index of dispersal distance traveled (1=stay, 2=distance 1, 3=distance 2, etc)
 
-    for j = 1:Noff;
+    for j = 1:Noff
 
         % mutate dispersal strategy slightly by taking or adding del from dispersal bin
         % if del amount isn't remaining in dispersal bin, take everything
@@ -145,7 +149,7 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
 
         for i = ind'
             % for offspring that survived dispersal
-            if surv(i)==1;
+            if surv(i)==1
                 x = dmap{j}(off(i,nbins+1),:); % possible patches to disperse to
                 y = randi(length(x)); % pick one at random
                 pat_disp(i) = x(y); % save landing patch
@@ -157,6 +161,7 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
     % remove offspring who died during dispersal here
     off(pat_disp==0,:) = []; % remove offspring who died during dispersal
     pat_disp(pat_disp==0) = [];
+    fitness(g,2) = length(pat_disp); % record number of offspring left after dispersal mortality
 
     pat_sett = tmap(pat_disp); % where offspring settle after dispersal
 
@@ -164,6 +169,9 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
 
     % find offspring who didn't settle anywhere and remove
     off(off(:,nbins+1)==0,:) = []; % remove offspring who died during dispersal
+    fitness(g,3) = length(off); % record number of offspring left after navigation
+
+
 
     clear srand surv drand d_ind ind i j pat_disp
     %-----MUTATION-AND-DISPERSAL-----%

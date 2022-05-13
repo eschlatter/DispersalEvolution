@@ -21,7 +21,7 @@ S = 32^2;      % number of sites in the environment
 sx = 2; % number of sites in the x-dimension of the environment
 sy = S/sx;
     
-G = 5; % number of total generations to simulate
+G = 25; % number of total generations to simulate
 
 % larval navigation distance of 0, 1, 2 or 3
 nmax = 2;  % maximum larval recruitment distance (behavior)
