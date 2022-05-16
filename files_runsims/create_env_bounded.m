@@ -33,6 +33,7 @@ function [] = create_env_bounded(sx,sy,nbins_env,nmax,b)
 %   nbins_env = max number of dispersal bins the env can support (must be >= 2)
 %   nmax = maximum larval navigation distance (behavior)
 %   bvec = vector of offspring capacity of each viable site, 1...S
+% %% dists = array of distances between each site
 
     stmp = nbins_env+1; % make sure environment can hold all max dispersal distances
 
@@ -51,6 +52,14 @@ function [] = create_env_bounded(sx,sy,nbins_env,nmax,b)
     ycoord = repmat([1:ydim]',1,xdim);
     ycoord = ycoord(:);                % vector of y-coordinates for each patch
 
+% %% create array of distances
+    dists=zeros(length(xcoord),length(xcoord));
+    for ii = 1:length(xcoord)
+        for i = 1:length(xcoord)
+            dists(ii,i)=((xcoord(ii)-xcoord(i))^2+(ycoord(ii)-ycoord(i))^2)^.5;
+        end
+    end
+    
 % create map from origin patches to possible post-dispersal patches
     % dmap{1} lists self
     % dmap{2} lists possible dispersal patches at distance 1
@@ -105,10 +114,10 @@ bvec = b*ones(S,1);
 
 clear E_via i ii ind stmp tmp xcoord_via ycoord_via xdim ydim y
 
-save(strcat(['env_bounded_sx=' num2str(sx) '_sy=' num2str(sy) '_nbins=' num2str(nbins_env) '_nmax=' num2str(nmax) '.mat']))
+save(strcat(['../test_output_environments/env_bounded_sx=' num2str(sx) '_sy=' num2str(sy) '_nbins=' num2str(nbins_env) '_nmax=' num2str(nmax) '.mat']),'-v7.3')
 
 figure(1);
 imagesc(E);
 colormap(flipud(gray))
 grid on
-saveas(1,strcat(['env_bounded_sx=' num2str(sx) '_sy=' num2str(sy) '.jpg']))
+saveas(1,strcat(['../test_output_environments/env_bounded_sx=' num2str(sx) '_sy=' num2str(sy) '.jpg']))

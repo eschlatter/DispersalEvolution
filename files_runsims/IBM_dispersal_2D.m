@@ -37,7 +37,7 @@ rng('shuffle') % seed the random number generator from computer clock
 
 K = 1;         % carrying capacity per patch
 
-saveto_filepath = '../output_simulations/20220513';
+saveto_filepath = '../output_simulations/20220516';
 
 if nbins < 2; error('nbins_use must be at least 2'); end
 if nbins > nbins_env; error('nbins_env must be bigger than nbins'); end
@@ -46,7 +46,7 @@ if nbins > nbins_env; error('nbins_env must be bigger than nbins'); end
     if eflag==1
         load(strcat(['../output_environments/env_unbounded_sx=' num2str(sx) '_sy=' num2str(sy) '_nbins=' num2str(nbins_env) '.mat']))
     elseif eflag==2
-        load(strcat(['../output_environments/env_bounded_sx=' num2str(sx) '_sy=' num2str(sy) '_nbins=' num2str(nbins_env) '_nmax=' num2str(nmax) '.mat']))
+        load(strcat(['../test_output_environments/env_bounded_sx=' num2str(sx) '_sy=' num2str(sy) '_nbins=' num2str(nbins_env) '_nmax=' num2str(nmax) '.mat']))
     elseif eflag==3
         load(strcat(['../output_environments/env_reef_nbins=' num2str(nbins_env) '_nmax=' num2str(nmax) '_bmin=' num2str(b(1)) '_bmax=' num2str(b(2)) '.mat']))
     elseif eflag==4
@@ -71,6 +71,13 @@ if nbins > nbins_env; error('nbins_env must be bigger than nbins'); end
     % matrix to record survival rates over time
     fitness = zeros(G,3);
 
+    % matrices to hold displacement, dispersal, and recruitment kernels
+    % from individual dispersal events
+    nbins_plus = nbins+nmax;
+    kernel_displacement = zeros(G,nbins_plus);
+    kernel_dispersal = zeros(G,nbins_plus);
+    kernel_recruitment = zeros(G,nbins_plus);
+
     % if set to display graphics, display first figure and wait for keystrike
     if gflag==1
         figure(1); clf
@@ -82,6 +89,7 @@ if nbins > nbins_env; error('nbins_env must be bigger than nbins'); end
     end
 %-----INITALIZATION-------------------------------------------------------%
 
+tic
 
 %-----SIMULATE------------------------------------------------------------%
 g=0; % this counts the number of generations that have passed
@@ -134,9 +142,13 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
         d_ind(j) = find(cumsum(off(j,1:nbins),2)>drand(j),1,'first');
 
     end
+
+    % store displacement distances
+    kernel_displacement(g,:) = sum(d_ind == 1:nbins_plus);
+
     clear ind val j
 
-    pat_disp = zeros(Noff,1); % to hold the patch where each offspring lands after dispersal
+    pat_disp = zeros(Noff,1); % to hold the patch where each offspring lands after dispersal (displacement)
 
     ind = find(d_ind==1); % which offspring did not disperse
     pat_disp(ind) = dmap{1}(off(ind,nbins+1)); % map natal patch from dmap
@@ -208,6 +220,8 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
         pause(0.1)
     end
 
+end % generation loop
+
     % save output as mat file
     if eflag==1
         save(strcat([saveto_filepath '/IBM_unbounded_sx=' num2str(sx) '_sy=' num2str(sy) '_nbins=' num2str(nbins) '_nmax=' num2str(nmax) '_del=' num2str(del) '_b=' num2str(b) '_p=' num2str(p) '.mat']))
@@ -219,10 +233,9 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
         save(strcat([saveto_filepath '/IBM_bounded_het_sx=' num2str(sx) '_sy=' num2str(sy) '_nbins=' num2str(nbins_env) '_nmax=' num2str(nmax) '_bmin=' num2str(bmin) '_bmax=' num2str(bmax) '_del=' num2str(del) '_p=' num2str(p) '.mat']))
     end
 
-end % generation loop
-
 %-----SIMULATE------------------------------------------------------------%
 
+toc
 
 %-----PLOT-RESULTS--------------------------------------------------------%
     figure(2);clf
@@ -248,8 +261,8 @@ end % generation loop
 
     % plot the kernel of population mean displacement probabilities
     figure(3);clf
-    kern = sum(pop(:,1:30),1)/length(pop);
-    bar(0:29,kern,'k')
+    kern = sum(pop(:,1:nbins),1)/length(pop);
+    bar(0:(nbins-1),kern,'k')
     axis([-0.5 29.5 0 1])
     ylabel('Population mean probability')
     xlabel('Distance')
