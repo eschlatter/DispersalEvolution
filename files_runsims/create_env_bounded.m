@@ -59,6 +59,7 @@ function [] = create_env_bounded(sx,sy,nbins_env,nmax,b)
             dists(ii,i)=((xcoord(ii)-xcoord(i))^2+(ycoord(ii)-ycoord(i))^2)^.5;
         end
     end
+    dists=floor(dists);
     
 % create map from origin patches to possible post-dispersal patches
     % dmap{1} lists self
@@ -111,6 +112,11 @@ function [] = create_env_bounded(sx,sy,nbins_env,nmax,b)
 
 % create vector of the number of offspring produced at each site
 bvec = b*ones(S,1);
+
+% %% create vector patches, with birth rate of each site (viable), or 0
+% (nonviable)
+patches = zeros(length(xcoord),1);
+patches(via_ID)=bvec; %added to create_env_bounded
 
 clear E_via i ii ind stmp tmp xcoord_via ycoord_via xdim ydim y
 

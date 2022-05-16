@@ -222,6 +222,8 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
 
 end % generation loop
 
+toc
+
     % save output as mat file
     if eflag==1
         save(strcat([saveto_filepath '/IBM_unbounded_sx=' num2str(sx) '_sy=' num2str(sy) '_nbins=' num2str(nbins) '_nmax=' num2str(nmax) '_del=' num2str(del) '_b=' num2str(b) '_p=' num2str(p) '.mat']))
@@ -234,8 +236,6 @@ end % generation loop
     end
 
 %-----SIMULATE------------------------------------------------------------%
-
-toc
 
 %-----PLOT-RESULTS--------------------------------------------------------%
     figure(2);clf
