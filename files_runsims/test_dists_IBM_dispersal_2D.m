@@ -110,6 +110,7 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
         for j = 1:size(pop,1)
             off = [off; repmat(pop(j,:),[patches(pop(j,nbins+1)),1])];
         end
+        off(1,nbins+2:nbins+3)=[0 0]; %add two more columns to off (will hold displacement and dispersal patches)
         Noff = size(off,1); % total number of offspring
         fitness(g,1) = Noff; % store total number of offspring produced
     %-----REPRODUCTION-----%
@@ -149,24 +150,23 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
 
     clear ind val j
 
-    pat_disp = zeros(Noff,1); % to hold the patch where each offspring lands after dispersal (displacement)
+% %%    pat_disp = zeros(Noff,1); % to hold the patch where each offspring lands after dispersal (displacement)
+% do this in the nbins+2 column of 'off' instead
 
     ind = find(d_ind==1); % which offspring did not disperse
-    pat_disp(ind) = off(ind,nbins+1); % map natal patch from dmap
+    off(ind,nbins+2) = off(ind,nbins+1); % map natal patch from dmap
 % %%    pat_disp(ind) = dmap{1}(off(ind,nbins+1)); % map natal patch from dmap
     clear ind
 
     % for each of the possible dispersal distances
     for j = 2:nbins
-
         ind = find(d_ind==j); % find all offspring that drew j-1 dipersal distance
-
         for i = ind'
             % for offspring that survived dispersal
             if surv(i)==1
-                x = find(dists(off(i,nbins+1),:)==(j-1)); %possible patches to disperse to
+                x = find(dists(:,off(i,nbins+1))==(j-1)); %possible patches to disperse to
                 y = randi(length(x)); % pick one at random
-                pat_disp(i)=x(y); % save landing patch
+                off(i,nbins+2)=x(y); % save landing patch
 % %%                Note that we've switched to Euclidean distance here (vs
 %                       the von Neumann distance that comes from dmap)
 % %%                x = dmap{j}(off(i,nbins+1),:); % possible patches to disperse to
@@ -178,35 +178,39 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
     end
 
     % remove offspring who died during dispersal here
-    off(pat_disp==0,:) = []; % remove offspring who died during dispersal
-    pat_disp(pat_disp==0) = [];
-    fitness(g,2) = length(pat_disp); % record number of offspring left after dispersal mortality
+    off(off(:,nbins+2)==0,:) = []; % remove offspring who died during dispersal
+% %%    pat_disp(pat_disp==0) = [];
+    fitness(g,2) = size(off,1); % record number of offspring left after dispersal mortality
 
     % navigation
-    pat_sett = zeros(length(pat_disp),1);
-    for i = 1:length(pat_disp)
-        if patches(pat_disp(i))==0 %if the larva has displaced to an uninhabitable patch
-            x = find(dists(pat_disp(i),:)<=nmax); %find patches within navigation distance
+% %%    pat_sett = zeros(length(pat_disp),1);
+% replace this with the nbins+3 column of 'off'
+    for i = 1:size(off,1)
+        if patches(off(i,nbins+2))==0 %if the larva has displaced to an uninhabitable patch
+            x = find(dists(:,off(i,nbins+2))<=nmax); %find patches within navigation distance
             x_hab = x(patches(x)~=0); %restrict to habitable patches
             if ~isempty(x_hab) %if there are any habitable patches
                 y = randi(length(x_hab)); %pick one at random
-                pat_sett(i) = x_hab(y); %save settlement patch
+                off(i,nbins+3) = x_hab(y); %save settlement patch
             end
         else % if the larva has displaced to a habitable patch
-            pat_sett(i) = pat_disp(i); %stay there
+            off(i,nbins+3) = off(i,nbins+2); %stay there
         end
     end
 % %%    pat_sett = tmap(pat_disp); % where offspring settle after dispersal
 
-    off(:,nbins+1) = pat_sett; % save new locations
+% %%    off(:,nbins+1) = pat_sett; % save new locations
 
     % find offspring who didn't settle anywhere and remove
-    off(off(:,nbins+1)==0,:) = []; % remove offspring who died during dispersal
-    fitness(g,3) = length(off); % record number of offspring left after navigation
+    off(off(:,nbins+3)==0,:) = []; % remove offspring who died during dispersal
+    fitness(g,3) = size(off,1); % record number of offspring left after navigation
 
+    % calculate and store dispersal distances
+    dispersal_distances = ((xcoord(off(:,nbins+1))-xcoord(off(:,nbins+3))).^2 + (ycoord(off(:,nbins+1))-ycoord(off(:,nbins+3))).^2).^0.5;
+    dispersal_distances = floor(dispersal_distances);
+    kernel_dispersal(g,:) = sum(dispersal_distances == 0:(nbins_plus-1));
 
-
-    clear srand surv drand d_ind ind i j pat_disp
+    clear srand surv drand d_ind ind i j
     %-----MUTATION-AND-DISPERSAL-----%
 
 
@@ -218,7 +222,9 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
     off = off(xind,:);
 
     % only allow K offspring per patch to survive
-    Noffs = hist(off(:,nbins+1),via_ID); % number of offspring per patch
+% %%    Noffs = hist(off(:,nbins+3),via_ID); % same as below, but I like
+% that syntax better
+    Noffs = sum(off(:,nbins+3)==via_ID'); % number of offspring per patch
     fullind = find(Noffs>K);  % index of overcrowded patches
     for i = 1:length(fullind) % loop over each overcrowded patch
         patch_ind = find(off(:,nbins+1)==via_ID(fullind(i))); % index of offspring in patch
@@ -226,8 +232,13 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
     end
     clear fullind patch_ind i
     % kill off all adults and just save offspring as new population
-    pop = off;
+    pop = off(:,[1:nbins,nbins+3]);
     %-----COMPETITION-----%
+
+    % calculate and store recruitment distances
+    recruitment_distances = ((xcoord(off(:,nbins+1))-xcoord(off(:,nbins+3))).^2 + (ycoord(off(:,nbins+1))-ycoord(off(:,nbins+3))).^2).^0.5;
+    recruitment_distances = floor(recruitment_distances);
+    kernel_recruitment(g,:) = sum(recruitment_distances == 0:(nbins_plus-1));
 
     % if set to display graphics, update figure 1
     if gflag==1
