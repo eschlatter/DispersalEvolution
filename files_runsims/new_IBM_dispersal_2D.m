@@ -1,12 +1,11 @@
-function [] = test_dists_IBM_dispersal_2D(gflag,eflag,sx,sy,nbins_env,nbins,nmax,G,b,p,del)
+function [] = new_IBM_dispersal_2D(gflag,eflag,sx,sy,nbins_env,nbins,nmax,G,b,p,del)
 % written by Allison K. Shaw (ashaw@umn.edu)
-% updated: June 2018
+% updated May 2022 by E Schlatter
 %
 % IBM version of Hamilton & May model with spatially-explicit patches in
 % 2-D
 % Two steps to the dispersal process: individuals go from natal patch to
-%   landing patch (using dmap), then move from landing patch to final
-%   patch (using tmap)
+%   landing patch, then move from landing patch to final patch
 %  > S sites in the environment, each supporting K individuals
 %  > each adult produces b offspring per generation
 %  > each individual is defined by set of dispersal strategies (probability
@@ -61,10 +60,8 @@ if nbins > nbins_env; error('nbins_env must be bigger than nbins'); end
     % create matrix to hold information for all individuals
     pop = zeros(N0,nbins+1);
     pop(:,1:(nmax+2)) = (1/(nmax+2))*ones(N0,nmax+2); % assign starting dispersal bin values (set equal prob of each distance up to navigation distance + 1)
-    %pop(:,1) = ones(N0,1); % assign starting dispersal bin values (set prob stay = 1, others zero)
     pop(:,nbins+1) = repmat(via_ID,1,K); % assign evenly to starting patches (patch named by absolute index (in xcoord,etc)
-    % %% pop(:,nbins+1) = repmat(1:S,1,K); % assign evenly to starting patches
-
+    
     % matrices to record population parameters in, over time
     dtime_avg = zeros(G,nbins); % population mean of dispersal parameters
     dtime_std = zeros(G,nbins); % pop. standard deviation of dispersal parammeters
@@ -99,7 +96,6 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
     g = g+1 % step generation forward
 
     % record statistics
-    N = size(pop,1);  % count number of individuals present
     dtime_avg(g,:) = mean(pop(:,1:nbins),1);   % average dispersal params
     dtime_std(g,:) = std(pop(:,1:nbins),[],1); % std. of dispersal params
 
@@ -150,16 +146,11 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
 
     clear ind val j
 
-% %%    pat_disp = zeros(Noff,1); % to hold the patch where each offspring lands after dispersal (displacement)
-% do this in the nbins+2 column of 'off' instead
-
     ind = find(d_ind==1); % which offspring did not disperse
     off(ind,nbins+2) = off(ind,nbins+1); % map natal patch from dmap
-% %%    pat_disp(ind) = dmap{1}(off(ind,nbins+1)); % map natal patch from dmap
     clear ind
 
-    % for each of the possible dispersal distances
-    for j = 2:nbins
+    for j = 2:nbins     % for each of the possible dispersal distances
         ind = find(d_ind==j); % find all offspring that drew j-1 dipersal distance
         for i = ind'
             % for offspring that survived dispersal
@@ -169,9 +160,6 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
                 off(i,nbins+2)=x(y); % save landing patch
 % %%                Note that we've switched to Euclidean distance here (vs
 %                       the von Neumann distance that comes from dmap)
-% %%                x = dmap{j}(off(i,nbins+1),:); % possible patches to disperse to
-% %%                y = randi(length(x)); % pick one at random
-% %%                pat_disp(i) = x(y); % save landing patch
             end
         end
 
@@ -179,12 +167,9 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
 
     % remove offspring who died during dispersal here
     off(off(:,nbins+2)==0,:) = []; % remove offspring who died during dispersal
-% %%    pat_disp(pat_disp==0) = [];
     fitness(g,2) = size(off,1); % record number of offspring left after dispersal mortality
 
     % navigation
-% %%    pat_sett = zeros(length(pat_disp),1);
-% replace this with the nbins+3 column of 'off'
     for i = 1:size(off,1)
         if patches(off(i,nbins+2))==0 %if the larva has displaced to an uninhabitable patch
             x = find(dists(:,off(i,nbins+2))<=nmax); %find patches within navigation distance
@@ -197,9 +182,6 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
             off(i,nbins+3) = off(i,nbins+2); %stay there
         end
     end
-% %%    pat_sett = tmap(pat_disp); % where offspring settle after dispersal
-
-% %%    off(:,nbins+1) = pat_sett; % save new locations
 
     % find offspring who didn't settle anywhere and remove
     off(off(:,nbins+3)==0,:) = []; % remove offspring who died during dispersal
@@ -222,8 +204,6 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
     off = off(xind,:);
 
     % only allow K offspring per patch to survive
-% %%    Noffs = hist(off(:,nbins+3),via_ID); % same as below, but I like
-% that syntax better
     Noffs = sum(off(:,nbins+3)==via_ID'); % number of offspring per patch
     fullind = find(Noffs>K);  % index of overcrowded patches
     for i = 1:length(fullind) % loop over each overcrowded patch

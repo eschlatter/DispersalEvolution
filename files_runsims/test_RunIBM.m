@@ -26,4 +26,4 @@ G = 5; % number of total generations to simulate
 % larval navigation distance of 0, 1, 2 or 3
 nmax = 1;  % maximum larval recruitment distance (behavior)
 
-test_dists_IBM_dispersal_2D(gflag,eflag,sx,sy,nbins_env,nbins,nmax,G,b,p,del)
+new_IBM_dispersal_2D(gflag,eflag,sx,sy,nbins_env,nbins,nmax,G,b,p,del)
