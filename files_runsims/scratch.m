@@ -1,7 +1,5 @@
 %% Parameters
-
 clear
-
 %BIOLOGICAL PARAMETERS
 gflag = 0;     % whether (1) or not (0) to show plots during simulation
 b = 10;        % offspring produced per individual
@@ -21,8 +19,6 @@ G = 5; % number of total generations to simulate
 % larval navigation distance of 0, 1, 2 or 3
 nmax = 1;  % maximum larval recruitment distance (behavior)
 
-%% Function
-
 rng('shuffle') % seed the random number generator from computer clock
 
 K = 1;         % carrying capacity per patch
@@ -36,7 +32,8 @@ if nbins > nbins_env; error('nbins_env must be bigger than nbins'); end
     if eflag==1
         load(strcat(['../output_environments/env_unbounded_sx=' num2str(sx) '_sy=' num2str(sy) '_nbins=' num2str(nbins_env) '.mat']))
     elseif eflag==2
-        load(strcat(['../test_output_environments/env_bounded_sx=' num2str(sx) '_sy=' num2str(sy) '_nbins=' num2str(nbins_env) '_nmax=' num2str(nmax) '.mat']))
+        load('C:\Users\eschlatter\Dropbox\DispersalEvolution\test_output_environments\env_bounded_sx=2_sy=512_nbins=5_nmax=1.mat')
+        %load(strcat(['../test_output_environments/env_bounded_sx=' num2str(sx) '_sy=' num2str(sy) '_nbins=' num2str(nbins_env) '_nmax=' num2str(nmax) '.mat']))
     elseif eflag==3
         load(strcat(['../output_environments/env_reef_nbins=' num2str(nbins_env) '_nmax=' num2str(nmax) 'dmap_bmin=' num2str(b(1)) '_bmax=' num2str(b(2)) '.mat']))
     elseif eflag==4
@@ -44,6 +41,7 @@ if nbins > nbins_env; error('nbins_env must be bigger than nbins'); end
     end
 %-----LOAD-ENVIRONMENT----------------------------------------------------%
 
+%% Simulation
 
 %-----INITALIZATION-------------------------------------------------------%
     N0 = round(K*S); % initial number of individuals - at capacity
@@ -51,10 +49,8 @@ if nbins > nbins_env; error('nbins_env must be bigger than nbins'); end
     % create matrix to hold information for all individuals
     pop = zeros(N0,nbins+1);
     pop(:,1:(nmax+2)) = (1/(nmax+2))*ones(N0,nmax+2); % assign starting dispersal bin values (set equal prob of each distance up to navigation distance + 1)
-    %pop(:,1) = ones(N0,1); % assign starting dispersal bin values (set prob stay = 1, others zero)
     pop(:,nbins+1) = repmat(via_ID,1,K); % assign evenly to starting patches (patch named by absolute index (in xcoord,etc)
-    % %% pop(:,nbins+1) = repmat(1:S,1,K); % assign evenly to starting patches
-
+    
     % matrices to record population parameters in, over time
     dtime_avg = zeros(G,nbins); % population mean of dispersal parameters
     dtime_std = zeros(G,nbins); % pop. standard deviation of dispersal parammeters
@@ -89,7 +85,6 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
     g = g+1 % step generation forward
 
     % record statistics
-    N = size(pop,1);  % count number of individuals present
     dtime_avg(g,:) = mean(pop(:,1:nbins),1);   % average dispersal params
     dtime_std(g,:) = std(pop(:,1:nbins),[],1); % std. of dispersal params
 
@@ -140,16 +135,11 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
 
     clear ind val j
 
-% %%    pat_disp = zeros(Noff,1); % to hold the patch where each offspring lands after dispersal (displacement)
-% do this in the nbins+2 column of 'off' instead
-
-    ind = find(d_ind==1); % which offspring did not disperse
-    off(ind,nbins+2) = off(ind,nbins+1); % map natal patch from dmap
-% %%    pat_disp(ind) = dmap{1}(off(ind,nbins+1)); % map natal patch from dmap
+    ind = find(d_ind==1); % which offspring didn't leave natal patch during displacement
+    off(ind,nbins+2) = off(ind,nbins+1); % their patch post-displacement is same as patch pre-displacement
     clear ind
 
-    % for each of the possible dispersal distances
-    for j = 2:nbins
+    for j = 2:nbins     % for each of the possible dispersal distances
         ind = find(d_ind==j); % find all offspring that drew j-1 dipersal distance
         for i = ind'
             % for offspring that survived dispersal
@@ -159,23 +149,19 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
                 off(i,nbins+2)=x(y); % save landing patch
 % %%                Note that we've switched to Euclidean distance here (vs
 %                       the von Neumann distance that comes from dmap)
-% %%                x = dmap{j}(off(i,nbins+1),:); % possible patches to disperse to
-% %%                y = randi(length(x)); % pick one at random
-% %%                pat_disp(i) = x(y); % save landing patch
             end
         end
 
     end
 
     % remove offspring who died during dispersal here
-    off(off(:,nbins+2)==0,:) = []; % remove offspring who died during dispersal
-% %%    pat_disp(pat_disp==0) = [];
-    fitness(g,2) = size(off,1); % record number of offspring left after dispersal mortality
+    died = off(:,nbins+2)==0; % any offspring not assigned a patch above died during displacement
+    off(died,:) = []; % remove offspring who died during displacement
+    fitness(g,2) = size(off,1); % record number of offspring left after displacement mortality
+    clear died
 
     % navigation
-% %%    pat_sett = zeros(length(pat_disp),1);
-% replace this with the nbins+3 column of 'off'
-    for i = 1:size(off,1)
+    for i = 1:size(off,1) %for each remaining larva
         if patches(off(i,nbins+2))==0 %if the larva has displaced to an uninhabitable patch
             x = find(dists(:,off(i,nbins+2))<=nmax); %find patches within navigation distance
             x_hab = x(patches(x)~=0); %restrict to habitable patches
@@ -187,17 +173,19 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
             off(i,nbins+3) = off(i,nbins+2); %stay there
         end
     end
-% %%    pat_sett = tmap(pat_disp); % where offspring settle after dispersal
-
-% %%    off(:,nbins+1) = pat_sett; % save new locations
 
     % find offspring who didn't settle anywhere and remove
-    off(off(:,nbins+3)==0,:) = []; % remove offspring who died during dispersal
+    died = off(:,nbins+3)==0;
+    off(died,:) = []; % remove offspring who died during navigation
     fitness(g,3) = size(off,1); % record number of offspring left after navigation
+    clear died
 
     % calculate and store dispersal distances
-    dispersal_distances = ((xcoord(off(:,nbins+1))-xcoord(off(:,nbins+3))).^2 + (ycoord(off(:,nbins+1))-ycoord(off(:,nbins+3))).^2).^0.5;
-    dispersal_distances = floor(dispersal_distances);
+    idx = sub2ind(size(dists),off(:,nbins+1),off(:,nbins+3));
+    dispersal_distances = dists(idx);
+    clear idx
+% %%     dispersal_distances = ((xcoord(off(:,nbins+1))-xcoord(off(:,nbins+3))).^2 + (ycoord(off(:,nbins+1))-ycoord(off(:,nbins+3))).^2).^0.5;
+% %%     dispersal_distances = floor(dispersal_distances);
     kernel_dispersal(g,:) = sum(dispersal_distances == 0:(nbins_plus-1));
 
     clear srand surv drand d_ind ind i j
@@ -212,12 +200,12 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
     off = off(xind,:);
 
     % only allow K offspring per patch to survive
-% %%    Noffs = hist(off(:,nbins+3),via_ID); % same as below, but I like
-% that syntax better
+    % %%(checked - all remaining offspring are in viable patches)
     Noffs = sum(off(:,nbins+3)==via_ID'); % number of offspring per patch
     fullind = find(Noffs>K);  % index of overcrowded patches
     for i = 1:length(fullind) % loop over each overcrowded patch
-        patch_ind = find(off(:,nbins+1)==via_ID(fullind(i))); % index of offspring in patch
+        patch_ind = find(off(:,nbins+3)==via_ID(fullind(i))); % index of offspring in patch
+% %%    patch_ind = find(off(:,nbins+1)==via_ID(fullind(i))); % !! typo
         off(patch_ind(K+1:end),:) = []; % kill all but K of these
     end
     clear fullind patch_ind i
@@ -226,8 +214,11 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
     %-----COMPETITION-----%
 
     % calculate and store recruitment distances
-    recruitment_distances = ((xcoord(off(:,nbins+1))-xcoord(off(:,nbins+3))).^2 + (ycoord(off(:,nbins+1))-ycoord(off(:,nbins+3))).^2).^0.5;
-    recruitment_distances = floor(recruitment_distances);
+    idx = sub2ind(size(dists),off(:,nbins+1),off(:,nbins+3));
+    recruitment_distances = dists(idx);
+    clear idx
+% %%    recruitment_distances = ((xcoord(off(:,nbins+1))-xcoord(off(:,nbins+3))).^2 + (ycoord(off(:,nbins+1))-ycoord(off(:,nbins+3))).^2).^0.5;
+% %%    recruitment_distances = floor(recruitment_distances);
     kernel_recruitment(g,:) = sum(recruitment_distances == 0:(nbins_plus-1));
 
     % if set to display graphics, update figure 1
@@ -244,52 +235,6 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
 
 end % generation loop
 
-toc
-
-    % save output as mat file
-    if eflag==1
-        save(strcat([saveto_filepath '/IBM_unbounded_sx=' num2str(sx) '_sy=' num2str(sy) '_nbins=' num2str(nbins) '_nmax=' num2str(nmax) '_del=' num2str(del) '_b=' num2str(b) '_p=' num2str(p) '.mat']))
-    elseif eflag==2
-        save(strcat([saveto_filepath '/IBM_bounded_sx=' num2str(sx) '_sy=' num2str(sy) '_nbins=' num2str(nbins) '_nmax=' num2str(nmax) '_del=' num2str(del) '_b=' num2str(b) '_p=' num2str(p) '.mat']))
-    elseif eflag==3
-        save(strcat([saveto_filepath '/IBM_reef_nbins=' num2str(nbins) '_nmax=' num2str(nmax) '_bmin=' num2str(bmin) '_bmax=' num2str(bmax) '_del=' num2str(del) '_p=' num2str(p) '.mat']))
-    elseif eflag==4
-        save(strcat([saveto_filepath '/IBM_bounded_het_sx=' num2str(sx) '_sy=' num2str(sy) '_nbins=' num2str(nbins_env) '_nmax=' num2str(nmax) '_bmin=' num2str(bmin) '_bmax=' num2str(bmax) '_del=' num2str(del) '_p=' num2str(p) '.mat']))
-    end
-
 %-----SIMULATE------------------------------------------------------------%
 
-%-----PLOT-RESULTS--------------------------------------------------------%
-    figure(2);clf
-    % plot the evolved dispersal bin values across generations
-    %subplot(2,2,3)
-    hold on
-    errorbar(dtime_avg,dtime_std)
-    axis([0 G 0 1.1])
-    xlabel('generation number')
-    ylabel('probability')
-    title('dispersal bin values')
-    legend(string(1:nbins))
-    % save figure
-    if eflag==1
-        saveas(2,strcat([saveto_filepath '/IBMfig_unbounded_sx=' num2str(sx) '_sy=' num2str(sy) '_nbins=' num2str(nbins) '_nmax=' num2str(nmax) '_del=' num2str(del) '_b=' num2str(b) '_p=' num2str(p) '.jpg']))
-    elseif eflag==2
-        saveas(2,strcat([saveto_filepath '/IBMfig_bounded_sx=' num2str(sx) '_sy=' num2str(sy) '_nbins=' num2str(nbins) '_nmax=' num2str(nmax) '_del=' num2str(del) '_b=' num2str(b) '_p=' num2str(p) '.jpg']))
-    elseif eflag==3
-        saveas(2,strcat([saveto_filepath '/IBMfig_reef_nbins=' num2str(nbins) '_nmax=' num2str(nmax) '_bmin=' num2str(bmin) '_bmax=' num2str(bmax) '_del=' num2str(del) '_p=' num2str(p) '.jpg']))
-    elseif eflag==4
-        saveas(2,strcat([saveto_filepath '/IBMfig_bounded_het_sx=' num2str(sx) '_sy=' num2str(sy) '_nbins=' num2str(nbins_env) '_nmax=' num2str(nmax) '_bmin=' num2str(bmin) '_bmax=' num2str(bmax) '_del=' num2str(del) '_p=' num2str(p) '.jpg']))
-    end
 
-    % plot the kernel of population mean displacement probabilities
-    figure(3);clf
-    kern = sum(pop(:,1:nbins),1)/length(pop);
-    bar(0:(nbins-1),kern,'k')
-    axis([-0.5 nbins-0.5 0 1])
-    ylabel('Population mean probability')
-    xlabel('Distance')
-    title(sprintf('Dispersal Kernel, nmax = %g',nmax))
-
-    writematrix(kern,sprintf('%s/kernel_WithNav_nbins=30_nmax = %g.csv',saveto_filepath,nmax))
-    saveas(3, sprintf('%s/fig_WithNav_nbins=30_nmax=%g.jpg',saveto_filepath,nmax))
-%-----PLOT-RESULTS--------------------------------------------------------%

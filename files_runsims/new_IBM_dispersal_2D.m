@@ -146,8 +146,8 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
 
     clear ind val j
 
-    ind = find(d_ind==1); % which offspring did not disperse
-    off(ind,nbins+2) = off(ind,nbins+1); % map natal patch from dmap
+    ind = find(d_ind==1); % which offspring didn't leave natal patch during displacement
+    off(ind,nbins+2) = off(ind,nbins+1); % their patch post-displacement is same as patch pre-displacement
     clear ind
 
     for j = 2:nbins     % for each of the possible dispersal distances
@@ -166,11 +166,13 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
     end
 
     % remove offspring who died during dispersal here
-    off(off(:,nbins+2)==0,:) = []; % remove offspring who died during dispersal
-    fitness(g,2) = size(off,1); % record number of offspring left after dispersal mortality
+    died = off(:,nbins+2)==0; % any offspring not assigned a patch above died during displacement
+    off(died,:) = []; % remove offspring who died during displacement
+    fitness(g,2) = size(off,1); % record number of offspring left after displacement mortality
+    clear died
 
     % navigation
-    for i = 1:size(off,1)
+    for i = 1:size(off,1) %for each remaining larva
         if patches(off(i,nbins+2))==0 %if the larva has displaced to an uninhabitable patch
             x = find(dists(:,off(i,nbins+2))<=nmax); %find patches within navigation distance
             x_hab = x(patches(x)~=0); %restrict to habitable patches
@@ -184,12 +186,17 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
     end
 
     % find offspring who didn't settle anywhere and remove
-    off(off(:,nbins+3)==0,:) = []; % remove offspring who died during dispersal
+    died = off(:,nbins+3)==0;
+    off(died,:) = []; % remove offspring who died during navigation
     fitness(g,3) = size(off,1); % record number of offspring left after navigation
+    clear died
 
     % calculate and store dispersal distances
-    dispersal_distances = ((xcoord(off(:,nbins+1))-xcoord(off(:,nbins+3))).^2 + (ycoord(off(:,nbins+1))-ycoord(off(:,nbins+3))).^2).^0.5;
-    dispersal_distances = floor(dispersal_distances);
+    idx = sub2ind(size(dists),off(:,nbins+1),off(:,nbins+3));
+    dispersal_distances = dists(idx);
+    clear idx
+% %%     dispersal_distances = ((xcoord(off(:,nbins+1))-xcoord(off(:,nbins+3))).^2 + (ycoord(off(:,nbins+1))-ycoord(off(:,nbins+3))).^2).^0.5;
+% %%     dispersal_distances = floor(dispersal_distances);
     kernel_dispersal(g,:) = sum(dispersal_distances == 0:(nbins_plus-1));
 
     clear srand surv drand d_ind ind i j
@@ -204,10 +211,12 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
     off = off(xind,:);
 
     % only allow K offspring per patch to survive
+    % %%(checked - all remaining offspring are in viable patches)
     Noffs = sum(off(:,nbins+3)==via_ID'); % number of offspring per patch
     fullind = find(Noffs>K);  % index of overcrowded patches
     for i = 1:length(fullind) % loop over each overcrowded patch
-        patch_ind = find(off(:,nbins+1)==via_ID(fullind(i))); % index of offspring in patch
+        patch_ind = find(off(:,nbins+3)==via_ID(fullind(i))); % index of offspring in patch
+% %%    patch_ind = find(off(:,nbins+1)==via_ID(fullind(i))); % !! typo
         off(patch_ind(K+1:end),:) = []; % kill all but K of these
     end
     clear fullind patch_ind i
@@ -216,8 +225,11 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
     %-----COMPETITION-----%
 
     % calculate and store recruitment distances
-    recruitment_distances = ((xcoord(off(:,nbins+1))-xcoord(off(:,nbins+3))).^2 + (ycoord(off(:,nbins+1))-ycoord(off(:,nbins+3))).^2).^0.5;
-    recruitment_distances = floor(recruitment_distances);
+    idx = sub2ind(size(dists),off(:,nbins+1),off(:,nbins+3));
+    recruitment_distances = dists(idx);
+    clear idx
+% %%    recruitment_distances = ((xcoord(off(:,nbins+1))-xcoord(off(:,nbins+3))).^2 + (ycoord(off(:,nbins+1))-ycoord(off(:,nbins+3))).^2).^0.5;
+% %%    recruitment_distances = floor(recruitment_distances);
     kernel_recruitment(g,:) = sum(recruitment_distances == 0:(nbins_plus-1));
 
     % if set to display graphics, update figure 1
