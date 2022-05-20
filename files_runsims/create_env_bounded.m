@@ -56,10 +56,11 @@ function [] = create_env_bounded(sx,sy,nbins_env,nmax,b)
     dists=zeros(length(xcoord),length(xcoord));
     for ii = 1:length(xcoord)
         for i = 1:length(xcoord)
-            dists(ii,i)=((xcoord(ii)-xcoord(i))^2+(ycoord(ii)-ycoord(i))^2)^.5;
+            dists(ii,i) = abs(xcoord(ii)-xcoord(i)) + abs(ycoord(ii)-ycoord(i)); % vonNeumann
+            %dists(ii,i)=((xcoord(ii)-xcoord(i))^2+(ycoord(ii)-ycoord(i))^2)^.5; % Euclidean
         end
     end
-    dists=floor(dists);
+    %dists=floor(dists);
     
 % % create map from origin patches to possible post-dispersal patches
 %     % dmap{1} lists self
