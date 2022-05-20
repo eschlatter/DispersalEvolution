@@ -3,16 +3,15 @@ clear
 
 load('C:\Users\eschlatter\Dropbox\DispersalEvolution\output_simulations\20220516\IBM_bounded_sx=2_sy=512_nbins=12_nmax=2_del=0.001_b=10_p=1.mat')
 
-totals = [sum(kernel_displacement,2) sum(kernel_dispersal,2) sum(kernel_recruitment,2)];
-
-
-
-
 % fitness over time
 % (fitness = fraction of larvae that survive after dispersal and navigation)
 plot(1:G,fitness(:,3)./fitness(:,1))
 xlabel('Generation')
 ylabel('Fraction of larve surviving dispersal and navigation')
+
+% number of larvae over time
+plot(fitness)
+legend('hatched','dispersed','navigated')
 
 % plot the evolved dispersal bin values across generations
 figure
