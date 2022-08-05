@@ -65,6 +65,11 @@ if nbins > nbins_env; error('nbins_env must be bigger than nbins'); end
     kernel_dispersal = zeros(G,nbins_plus);
     kernel_recruitment = zeros(G,nbins_plus);
 
+%%%%%%%%%%%%%    
+    % matrices to hold parent-level larval survival rates
+    parent_surv_dispersal = zeros(length(via_ID),G);
+    parent_surv_recruitment = zeros(length(via_ID),G);
+
     % if set to display graphics, display first figure and wait for keystrike
     if gflag==1
         figure(1); clf
@@ -180,6 +185,12 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
     fitness(g,3) = size(off,1); % record number of offspring left after navigation
     clear died
 
+%%%%%%%%%%%%%%%%%    
+    % store number of offspring who survived dispersal from each original patch
+    for patch = 1:length(via_ID)
+        parent_surv_dispersal(patch,g)=sum(off(:,6)==via_ID(patch));
+    end
+
     % calculate and store dispersal distances
     idx = sub2ind(size(dists),off(:,nbins+1),off(:,nbins+3));
     dispersal_distances = dists(idx);
@@ -213,6 +224,12 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
     pop = off(:,[1:nbins,nbins+3]);
     %-----COMPETITION-----%
 
+%%%%%%%%%%%%%%%%%    
+    % store number of offspring who survived recruitment from each original patch
+    for patch = 1:length(via_ID)
+        parent_surv_recruitment(patch,g)=sum(off(:,6)==via_ID(patch));
+    end
+
     % calculate and store recruitment distances
     idx = sub2ind(size(dists),off(:,nbins+1),off(:,nbins+3));
     recruitment_distances = dists(idx);
@@ -238,3 +255,25 @@ end % generation loop
 %-----SIMULATE------------------------------------------------------------%
 
 
+
+
+%%%%%%%%%%%%%
+% plot # of offspring that successfully disperse
+figure
+clf
+mean_parent_surv_dispersal = mean(parent_surv_dispersal);
+sd_parent_surv_dispersal = std(parent_surv_dispersal);
+errorbar(mean_parent_surv_dispersal,sd_parent_surv_dispersal)
+title(sprintf('Per-parent dispersal survival rate, nmax = %g',nmax));
+xlabel('Generation')
+ylabel('Successfully dispersing offspring per parent (mean+/-sd)')
+
+% plot # of offspring that successfully recruit
+figure
+clf
+mean_parent_surv_recruitment = mean(parent_surv_recruitment);
+sd_parent_surv_recruitment = std(parent_surv_recruitment);
+errorbar(mean_parent_surv_recruitment,sd_parent_surv_recruitment)
+title(sprintf('Per-parent recruitment rate, nmax = %g',nmax));
+xlabel('Generation')
+ylabel('Successfully recruiting offspring per parent (mean+/-sd)')
