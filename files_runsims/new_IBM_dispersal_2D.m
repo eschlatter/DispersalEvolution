@@ -36,7 +36,7 @@ rng('shuffle') % seed the random number generator from computer clock
 
 K = 1;         % carrying capacity per patch
 
-saveto_filepath = '../output_simulations/20220805_test';
+saveto_filepath = '../output_simulations/20220927_test';
 
 if nbins < 2; error('nbins_use must be at least 2'); end
 if nbins > nbins_env; error('nbins_env must be bigger than nbins'); end
@@ -77,8 +77,9 @@ if nbins > nbins_env; error('nbins_env must be bigger than nbins'); end
     kernel_recruitment = zeros(G,nbins_plus);
 
     % matrices to hold parent-level larval survival rates
-    parent_surv_dispersal = zeros(length(via_ID),G);
-    parent_surv_recruitment = zeros(length(via_ID),G);
+    parent_kernel_mean = zeros(length(via_ID),G); %mean of the parental displacement strategy
+    parent_surv_dispersal = zeros(length(via_ID),G); %larvae that make it to a habitable site (by displacement or navigation)
+    parent_surv_recruitment = zeros(length(via_ID),G); %larvae that actually recruit
 
     % if set to display graphics, display first figure and wait for keystrike
     if gflag==1
@@ -102,6 +103,7 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
     % record statistics
     dtime_avg(g,:) = mean(pop(:,1:nbins),1);   % average dispersal params
     dtime_std(g,:) = std(pop(:,1:nbins),[],1); % std. of dispersal params
+    parent_kernel_mean(:,g) = pop(:,1:nbins)*(0:(nbins-1))'; %mean of each parent's displacement strategy
 
     %-----REPRODUCTION-----%
         % each individual produces b offspring with same patch and dispersal
