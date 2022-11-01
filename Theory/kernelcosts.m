@@ -64,12 +64,15 @@ if(showplot==1)
 
     hold on
     bar(v,'w')
-    plot(1:D,M,'.-',1:D,K,'.-',1:D,B,'.-')
-    legend('kernel','mortality','kin competition','total benefit')
+    %plot(1:D,M,'.-','LineWidth',1,'MarkerSize',10)
+    %plot(1:D,M,'.-',1:D,K,'.-',1:D,B,'.-','LineWidth',1,'MarkerSize',10)
+    %legend('kernel','mortality','kin competition','total benefit')
     xlabel('Distance')
     xticks(1:D)
     xticklabels(string(0:D-1))
-    title(sprintf('nmax=%g',nmax))
+    ylim([0 1])
+    %title(sprintf('nmax=%g',nmax))
+    legend('off')
     hold off
 end
 

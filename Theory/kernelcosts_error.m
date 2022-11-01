@@ -81,14 +81,16 @@ if(showplot==1)
     hold on
     bar(max_kern,'FaceColor','none')
     bar(min_kern,'FaceColor','none')
-    plot(1:D,M,'.-r')
-    errorbar(1:D,mean_ind_cost,error_ind_cost/2,'Color','#EDB120')
-    errorbar(1:D,mean_benefit,error_benefit/2,'Color','#7E2F8E')
-    legend('kernel1','kernel2','direct cost','indirect cost','total benefit')
+    %plot(1:D,M,'.-','Color','#D95319','LineWidth',1,'MarkerSize',10)
+    %errorbar(1:D,mean_ind_cost,error_ind_cost/2,'Color','#EDB120','LineWidth',1,'MarkerSize',10)
+    %errorbar(1:D,mean_benefit,error_benefit/2,'Color','#7E2F8E','LineWidth',1,'MarkerSize',10)
+    %legend('kernel1','kernel2','mortality','kin competition','total benefit')
     xlabel('Distance')
     xticks(1:D)
     xticklabels(string(0:D-1))
-    title(sprintf('nmax=%g',nmax))
+    ylim([0 1])
+    %title(sprintf('nmax=%g',nmax))
+    legend('off')
     hold off
 
 end
