@@ -103,7 +103,9 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
     % record statistics
     dtime_avg(g,:) = mean(pop(:,1:nbins),1);   % average dispersal params
     dtime_std(g,:) = std(pop(:,1:nbins),[],1); % std. of dispersal params
-    parent_kernel_mean(:,g) = pop(:,1:nbins)*(0:(nbins-1))'; %mean of each parent's displacement strategy
+    if(size(pop,1)==length(via_ID))
+        parent_kernel_mean(:,g) = pop(:,1:nbins)*(0:(nbins-1))'; %mean of each parent's displacement strategy
+    end
 
     %-----REPRODUCTION-----%
         % each individual produces b offspring with same patch and dispersal
