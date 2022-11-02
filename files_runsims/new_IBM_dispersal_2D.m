@@ -1,4 +1,4 @@
-function [] = new_IBM_dispersal_2D(gflag,eflag,sx,sy,nbins_env,nbins,nmax,G,b,p,del)
+function [] = new_IBM_dispersal_2D(gflag,eflag,sx,sy,nbins_env,nbins,nmax,G,b,p,del,saveto_filepath)
 % written by Allison K. Shaw (ashaw@umn.edu)
 % updated May 2022 by E Schlatter
 %
@@ -36,7 +36,7 @@ rng('shuffle') % seed the random number generator from computer clock
 
 K = 1;         % carrying capacity per patch
 
-saveto_filepath = '../output_simulations/20220927_test';
+%saveto_filepath = '../output_simulations/20221101';
 
 if nbins < 2; error('nbins_use must be at least 2'); end
 if nbins > nbins_env; error('nbins_env must be bigger than nbins'); end
