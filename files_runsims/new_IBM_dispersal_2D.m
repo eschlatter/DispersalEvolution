@@ -166,8 +166,6 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
                 x = find(dists(:,off(i,nbins+1))==(j-1)); %possible patches to disperse to
                 y = randi(length(x)); % pick one at random
                 off(i,nbins+2)=x(y); % save landing patch
-% %%                Note that we've switched to Euclidean distance here (vs
-%                       the von Neumann distance that comes from dmap)
             end
         end
 

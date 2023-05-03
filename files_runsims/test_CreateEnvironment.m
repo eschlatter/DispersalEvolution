@@ -7,6 +7,12 @@ maxNumCompThreads(NSLOTS);
 
 % STEP 1: create environments, before moving on to IBMs
 
+    S = 32^2;      % number of sites in the environment
+    b = 10;        % offspring produced per individual
+    sx = 2; % number of sites in the x-dimension of the environment
+    sy = S/sx;
+    create_env_bounded(sx,sy,b)
+
 %% BOUNDED ENVIRONMENTS
 
     nbins_env = 10; % max number of dispersal bins the env can support (must be >= 2)

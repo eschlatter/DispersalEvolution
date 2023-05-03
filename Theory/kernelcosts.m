@@ -64,9 +64,10 @@ if(showplot==1)
 
     hold on
     bar(v,'w')
-    %plot(1:D,M,'.-','LineWidth',1,'MarkerSize',10)
-    %plot(1:D,M,'.-',1:D,K,'.-',1:D,B,'.-','LineWidth',1,'MarkerSize',10)
-    %legend('kernel','mortality','kin competition','total benefit')
+    plot(1:D,M,'.-','Color','#D95319','LineWidth',1,'MarkerSize',10)
+    plot(1:D,K,'.-','Color','#EDB120','LineWidth',1,'MarkerSize',10)
+    plot(1:D,B,'.-','Color','#7E2F8E','LineWidth',1,'MarkerSize',10)
+    legend('kernel','mortality','kin competition','total benefit')
     xlabel('Distance')
     xticks(1:D)
     xticklabels(string(0:D-1))

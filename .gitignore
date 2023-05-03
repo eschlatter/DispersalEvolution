@@ -42,3 +42,4 @@ codegen/
 
 # Simulink cache files
 *.slxc
+.Rproj.user
