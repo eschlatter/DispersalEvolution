@@ -17,7 +17,7 @@ nmax = 0;  % maximum larval recruitment distance (behavior)
 v = [0.5 0.25 0.2 0.04 0.01 0];
 
 %-----------Run the function----------------%
-[M,K,K2]=fn_costben_sim(b,p,nbins,eflag,sx,sy,nmax,v);
+[M,K,K2]=fn_one_costben_sim(b,p,nbins,eflag,sx,sy,nmax,v);
 B = (1-M).*(1-K2); % total benefit
 
 

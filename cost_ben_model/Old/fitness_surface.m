@@ -15,7 +15,7 @@ sx = 2; % number of sites in the x-dimension of the environment
 sy = S/sx;
     
 % larval navigation distance of 0, 1, 2 or 3
-nmax = 0;  % maximum larval recruitment distance (behavior)
+nmax = 1;  % maximum larval recruitment distance (behavior)
 
 % --------------- Generate kernels ------------------ %
 
@@ -44,7 +44,7 @@ dist_mortcost = zeros(length(kernels),nbins);
 tic
 for i=1:size(kernels,1)
     v = kernels(i,:);
-    [M,K]=fn_costben_sim(b,p,nbins,eflag,sx,sy,nmax,v);
+    [M,K]=fn_one_costben_sim(b,p,nbins,eflag,sx,sy,nmax,v);
     B = (1-M).*(1-K); % total benefit
     dist_fitness(i,:) = B;
     B(isnan(B))=0; % NaN entries mean no larvae displaced that distance,
@@ -59,6 +59,6 @@ for i=1:size(kernels,1)
 end
 toc
 
-save('fitness_surface.mat',"out_fitness","out_kincost","out_mortcost","dist_fitness","dist_kincost","dist_mortcost","kernels")
+save('nmax_1/fitness_surface.mat',"out_fitness","out_kincost","out_mortcost","dist_fitness","dist_kincost","dist_mortcost","kernels")
 
 

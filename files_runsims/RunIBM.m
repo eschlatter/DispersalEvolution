@@ -31,7 +31,10 @@ nmax = 0;  % maximum larval navigation distance (behavior)
 
 %INITIAL CONDITIONS
     % option 1: specify starting displacement kernel
-    v = [0.5 0.25 0.2 0.04 0.01 0]; % starting displacement kernel
+    v = [1 0 0 0 0 0]; % top left corner of mort-kin map
+%     v = [0 0 0 0 0 1]; % bottom right corner of mort-kin map
+%     v = [0.5 0 0 0 0 0.5]; % to right of ESS on mort-kin map
+%     v = [9/12 0 0 0 0 3/12]; % above ESS on mort-kin map
     pop_init = fn_create_initial_pop(v,eflag,sx,sy,nbins_env,nbins,nmax,b);
     
     % option 2: default, uniform displacement kernel

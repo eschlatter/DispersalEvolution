@@ -1,4 +1,4 @@
-function [mortality_cost, kincomp2_cost] = fn_costben_sim(b,p,nbins,eflag,sx,sy,nmax,v)
+function [mortality_cost, kincomp2_cost] = fn_one_costben_sim(b,p,nbins,eflag,sx,sy,nmax,v)
 % Make a model that takes a displacement kernel, a seascape, and
 % parameters, simulates one generation of dispersal, and calculates the
 % following, for each displacement distance:

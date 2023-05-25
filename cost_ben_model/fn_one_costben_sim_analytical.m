@@ -1,11 +1,11 @@
-function dit=fn_kernelcosts_sim(b,del,p,nbins_env,nbins,eflag,sx,sy,nmax,v_start)
+function dit=fn_one_costben_sim_analytical(b,del,p,nbins_env,nbins,eflag,sx,sy,nmax,v_start)
 %calculates direct and indirect costs, and total benefit, of a given
 %displacement strategy (for nmax=0,1,2)
 
 v = v_start;
 
 %-------------Simulation----------------%
-[M,K] = fn_costben_sim(b,del,p,nbins_env,nbins,eflag,sx,sy,nmax,v_start);
+[M,K] = fn_one_costben_sim(b,del,p,nbins_env,nbins,eflag,sx,sy,nmax,v_start);
 
 
 

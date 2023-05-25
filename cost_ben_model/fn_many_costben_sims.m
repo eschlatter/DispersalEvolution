@@ -1,4 +1,4 @@
-function []=fn_calculate_MK(kernels,b,p,nbins,eflag,sx,sy,nmax,saveto_filepath)
+function []=fn_many_costben_sims(kernels,b,p,nbins,eflag,sx,sy,nmax,saveto_filepath)
 % takes a matrix of kernels (each row a kernel, each column a distance
 % probability) plus simulation parameters, and outputs mortality and kin
 % competition costs and fitness for each kernel
@@ -14,7 +14,7 @@ tic
 for i=1:size(kernels,1)
     i
     v = kernels(i,:);
-    [M,K]=fn_costben_sim(b,p,nbins,eflag,sx,sy,nmax,v);
+    [M,K]=fn_one_costben_sim(b,p,nbins,eflag,sx,sy,nmax,v);
     B = (1-M).*(1-K); % total benefit
     dist_fitness(i,:) = B;
     B(isnan(B))=0; % NaN entries mean no larvae displaced that distance,

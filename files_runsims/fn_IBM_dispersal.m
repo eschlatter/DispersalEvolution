@@ -283,4 +283,6 @@ clear dists
         save(strcat([saveto_filepath '/IBM_bounded_het_sx=' num2str(sx) '_sy=' num2str(sy) '_nbins=' num2str(nbins_env) '_nmax=' num2str(nmax) '_bmin=' num2str(bmin) '_bmax=' num2str(bmax) '_del=' num2str(del) '_p=' num2str(p) '.mat']))
     end
 
+    save(strcat([saveto_filepath '/dtime_avg.mat']),"dtime_avg")
+
 %-----SIMULATE------------------------------------------------------------%
