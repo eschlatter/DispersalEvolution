@@ -1,6 +1,6 @@
-function [] = clean_new_IBM_dispersal_2D(gflag,eflag,sx,sy,nbins_env,nbins,nmax,G,b,p,del,pop_init,saveto_filepath)
+function [] = fn_IBM_dispersal(gflag,eflag,sx,sy,nbins_env,nbins,nmax,G,b,p,del,pop_init,saveto_filepath)
 % written by Allison K. Shaw (ashaw@umn.edu)
-% updated March 2023 by E Schlatter
+% updated May 2023 by E Schlatter
 %
 % IBM version of Hamilton & May model with spatially-explicit patches in
 % 2-D
@@ -30,7 +30,7 @@ function [] = clean_new_IBM_dispersal_2D(gflag,eflag,sx,sy,nbins_env,nbins,nmax,
 %   b = offspring produced per individual
 %   p = probability of surviving dispersal
 %   del = fraction of dispersal probability to move during mutation
-% 
+%   pop_init = initial population array (e.g., from previous simulation)
 
 rng('shuffle') % seed the random number generator from computer clock
 

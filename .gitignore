@@ -10,8 +10,6 @@ resources/
 
 files_plotcomparisons/
 
-files_plotsims/
-
 *.prj
 
 # Windows default autosave extension
