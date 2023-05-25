@@ -1,15 +1,8 @@
-function dit=kernelcosts_sim(b,del,p,nbins_env,nbins,eflag,sx,sy,nmax,v_start)
+function dit=kernelcosts_altfitness(kernel,nmax,showplot)
 %calculates direct and indirect costs, and total benefit, of a given
 %displacement strategy (for nmax=0,1,2)
 
-v = v_start;
-
-%-------------Simulation----------------%
-[M,K] = fn_costben_sim(b,del,p,nbins_env,nbins,eflag,sx,sy,nmax,v_start);
-
-
-
-%--------------Theoretical---------------%
+v = kernel;
 D = length(v); % number of displacement bins
 
 c = zeros(1,D); % displacement process mortality
@@ -63,22 +56,21 @@ end
 % total indirect cost
 K = S./T;
 
-B = (1-M).*(1-K); % total benefit
+B = (1-M).*(1-K)./T; % total benefit
 
 dit = [M; K; B];
 
-hold on
-bar(v,'w')
-plot(1:D,M,'.-','Color','#D95319','LineWidth',1,'MarkerSize',10)
-plot(1:D,K,'.-','Color','#EDB120','LineWidth',1,'MarkerSize',10)
-plot(1:D,B,'.-','Color','#7E2F8E','LineWidth',1,'MarkerSize',10)
-legend('kernel','mortality','kin competition','total benefit')
-xlabel('Distance')
-xticks(1:D)
-xticklabels(string(0:D-1))
-ylim([0 1])
-%title(sprintf('nmax=%g',nmax))
-legend('off')
-hold off
+if(showplot==1)
+
+    hold on
+    bar(v,'w')
+    plot(1:D,M,'.-',1:D,K,'.-',1:D,B,'.-')
+    legend('kernel','mortality','kin competition','total benefit')
+    xlabel('Distance')
+    xticks(1:D)
+    xticklabels(string(0:D-1))
+    title(sprintf('nmax=%g',nmax))
+    hold off
+end
 
 end

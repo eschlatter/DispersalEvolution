@@ -20,4 +20,4 @@ nmax = 0;  % maximum larval recruitment distance (behavior)
 load('weibull_kerns.mat')
 saveto_filepath = 'weibull_MK';
 
-calculate_MK(kerns,b,p,nbins,eflag,sx,sy,nmax,saveto_filepath)
+fn_calculate_MK(kerns,b,p,nbins,eflag,sx,sy,nmax,saveto_filepath)

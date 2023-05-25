@@ -1,4 +1,4 @@
-function []=calculate_MK(kernels,b,p,nbins,eflag,sx,sy,nmax,saveto_filepath)
+function []=fn_calculate_MK(kernels,b,p,nbins,eflag,sx,sy,nmax,saveto_filepath)
 % takes a matrix of kernels (each row a kernel, each column a distance
 % probability) plus simulation parameters, and outputs mortality and kin
 % competition costs and fitness for each kernel

@@ -33,13 +33,13 @@ ylabel('lambda')
 
 lambda = 5;
 k = 1.5;
-plot(0:0.1:10,weibull_pdf(0:0.1:10,lambda,k))
-weibull_cdf(60,lambda,k)
+plot(0:0.1:10,fn_weibull_pdf(0:0.1:10,lambda,k))
+fn_weibull_cdf(60,lambda,k)
 
 
 hold on
-plot(0:0.1:2.5,weibull_pdf(0:0.1:2.5,1,1.5))
-plot(0:0.1:2.5,weibull_pdf(0:0.1:2.5,2,1.5))
+plot(0:0.1:2.5,fn_weibull_pdf(0:0.1:2.5,1,1.5))
+plot(0:0.1:2.5,fn_weibull_pdf(0:0.1:2.5,2,1.5))
 hold off
 
 a = Weibull(1:6,lambda,k);
