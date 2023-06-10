@@ -257,8 +257,8 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
         for j = 1:size(off_dist,1)
             origin = off_dist(j,nbins+1);
             destination = off_dist(j,nbins+3);
-            sibs = sum((off(:,nbins+1)==origin).*(off(:,nbins+3)==destination));
-            kincost_i(j) = sibs/(b-1); % subtract one for the focal individual
+            sibs = sum((off(:,nbins+1)==origin).*(off(:,nbins+3)==destination))-1; % subtract one for the focal individual
+            kincost_i(j) = sibs/(b-1);
         end
         
         kincomp_cost(g,i) = mean(kincost_i);

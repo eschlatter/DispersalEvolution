@@ -182,7 +182,7 @@ clear fullind patch_ind i
             %n_competitors = sum(off(:,nbins+3)==destination);
             sibs = sum((off(:,nbins+1)==origin).*(off(:,nbins+3)==destination))-1;
             %kincost_i = [kincost_i sibs/n_competitors];
-            kincost2_i = [kincost2_i sibs/b];
+            kincost2_i = [kincost2_i sibs/(b-1)];
         end
         clear origin destination
 
