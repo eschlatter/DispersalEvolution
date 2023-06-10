@@ -232,6 +232,8 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
     % direct cost (proportion of larvae that die because they can't reach suitable habitat)
     for i = 1:nbins
         %%%%%%%%%%%%%%%%%%%%% should this be offspring with DISPERSAL distance i? %%%%%%%%%%%%%%%%%%%%
+        %%% No. Because we're looking at what DISPLACEMENT kernel evolves
+        %%% -- i.e., the fitness of each displacement distance.
         off_dist = off(off(:,nbins+5) == i,:); %offspring with displacement distance i
         died_in_nav = sum(off_dist(:,nbins+3)==0); %how many didn't reach suitable habitat
         mortality_cost(g,i) = died_in_nav/size(off_dist,1);
@@ -255,8 +257,8 @@ while g<G && size(pop,1)>0 % loop over generations (only while population not ex
         for j = 1:size(off_dist,1)
             origin = off_dist(j,nbins+1);
             destination = off_dist(j,nbins+3);
-            sibs = sum((off(:,nbins+1)==origin).*(off(:,nbins+3)==destination))-1; % subtract one for the focal individual
-            kincost_i(j) = sibs/b;
+            sibs = sum((off(:,nbins+1)==origin).*(off(:,nbins+3)==destination));
+            kincost_i(j) = sibs/(b-1); % subtract one for the focal individual
         end
         
         kincomp_cost(g,i) = mean(kincost_i);
